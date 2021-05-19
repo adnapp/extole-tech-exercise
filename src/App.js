@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 function App() {
 
     let [userEmail, setUserEmail] = useState("")
+    let [shareLink, setShareLink] = useState(null)
 
     function handleSubmitEmail() {
 
@@ -11,7 +12,7 @@ function App() {
         }
         
         fetch('https://extole-api.extole.io/api/v5/token', {
-            method: 'POST', // or 'PUT'
+            method: 'POST', 
             headers: {
                 "Accept": "Application/json",
                 'Content-Type': 'application/json',
@@ -29,11 +30,11 @@ function App() {
 
         let data = {
             "access_token": accessToken,
-            "email": "user@extole.com",
+            "email": userEmail,
         }
 
         fetch('https://extole-api.extole.io/api/v4/me', {
-            method: 'POST', // or 'PUT'
+            method: 'POST', 
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -66,6 +67,7 @@ function App() {
         .then(response => response.json())
         .then(data => {
            console.log("Share Link", data.link)
+           setShareLink(data.link)
         })
     }
 
@@ -78,6 +80,9 @@ function App() {
 
         </input>
         <button onClick={() => handleSubmitEmail()}>Execute</button>
+        <br></br>
+        {shareLink ? <p>Share Link: {shareLink}</p>
+        : <p> Enter Email</p>}
 
 
     </>
