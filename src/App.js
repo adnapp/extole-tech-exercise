@@ -2,13 +2,27 @@ import React, {useState} from 'react';
 
 function App() {
 
-    let [userEmail, setUserEmail] = useState("")
+    let [userData, setUserData] = useState({
+        userEmail: "",
+        firstName: "",
+        lastName: "",
+    })
     let [shareLink, setShareLink] = useState(null)
+
+    function handleChange(event){
+        const name = event.target.name; 
+        let value = event.target.value;
+
+        setUserData({
+            ...userData,
+            [name]: value,
+        })
+    }
 
     function handleSubmitEmail() {
 
         let data = {
-            'email': userEmail
+            'email': userData.userEmail
         }
         
         fetch('https://extole-api.extole.io/api/v5/token', {
@@ -34,7 +48,10 @@ function App() {
 
         let data = {
             "access_token": accessToken,
-            "email": userEmail,
+            "email": userData.userEmail,
+            "first_name": userData.firstName,
+            "last_name": userData.lastName,
+
         }
 
         fetch('https://extole-api.extole.io/api/v4/me', {
@@ -49,7 +66,7 @@ function App() {
             if (!data.status){
                 console.log(data.message)
             }else{
-                console.log('Success set profile');
+                console.log('Success set profile', data);
                 createShareLink(accessToken)
             }
         })
@@ -72,22 +89,44 @@ function App() {
         .then(data => {
            console.log("Share Link", data.link)
            setShareLink(data.link)
+           setUserData({
+                userEmail: "",
+                firstName: "",
+                lastName: "",
+            })
         })
     }
 
   return (
     <>
 
-        <input 
-            value={userEmail} 
-            onChange={(e)=> setUserEmail(e.target.value)}>
+        <label> First Name </label>
+        <input
+           name = "firstName" 
+           value={userData.firstName} 
+           onChange={handleChange}
+        >
+        </input>
 
+        <label> Last Name: </label>
+        <input
+           name = "lastName" 
+           value={userData.lastName} 
+           onChange={handleChange}
+        ></input>
+
+       <br/>
+       <br/>
+       <label>Enter Email: </label>
+        <input 
+            name = "userEmail"
+            value={userData.userEmail} 
+            onChange={handleChange}>
         </input>
         <button onClick={() => handleSubmitEmail()}>Execute</button>
         <br></br>
         {shareLink ? <p>Share Link: {shareLink}</p>
         : <p> Enter Email</p>}
-
 
     </>
   );
