@@ -51,7 +51,6 @@ function App() {
             "email": userData.userEmail,
             "first_name": userData.firstName,
             "last_name": userData.lastName,
-
         }
 
         fetch('https://extole-api.extole.io/api/v4/me', {
@@ -99,7 +98,6 @@ function App() {
 
   return (
     <>
-
         <label> First Name </label>
         <input
            name = "firstName" 
