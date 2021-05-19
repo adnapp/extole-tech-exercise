@@ -21,8 +21,12 @@ function App() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('success got access token', data.access_token)
-            handleSetProfile(data.access_token)
+            if (!data.access_token) {
+                console.log("Execution not successful: ",data.message)
+            }else{
+                console.log('success got access token', data.access_token)
+                handleSetProfile(data.access_token)
+            }
         })
     }
 
@@ -52,7 +56,7 @@ function App() {
     }
 
     function createShareLink(accessToken){
-        console.log(accessToken)
+        
         let data = {
             "label": "refer-a-friend"
         }
